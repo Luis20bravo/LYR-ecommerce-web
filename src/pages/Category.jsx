@@ -150,30 +150,34 @@ export default function Category() {
         {/* Lista de productos */}
         {!loading && !err && products.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {products.map((p) => (
-              <Link
-                key={p.id}
-                to={`/producto/${p.id}`}
-                className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition block"
-              >
-                <img
-                  src={
-                    p.image_url
-                      ? `http://localhost:4000${p.image_url}`
-                      : "https://via.placeholder.com/200"
-                  }
-                  alt={p.name}
-                  className="w-full h-40 object-cover rounded"
-                />
-                <h2 className="mt-4 text-lg font-semibold">{p.name}</h2>
-                <p className="text-gray-600">
-                  ${Number(p.price ?? 0).toFixed(2)}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {p.stock > 0 ? `Stock: ${p.stock}` : "Agotado"}
-                </p>
-              </Link>
-            ))}
+            {products.map((p) => {
+              const imageSrc = p.image_url
+                ? p.image_url.startsWith("http")
+                  ? p.image_url
+                  : `http://localhost:4000${p.image_url}`
+                : "https://via.placeholder.com/200";
+
+              return (
+                <Link
+                  key={p.id}
+                  to={`/producto/${p.id}`}
+                  className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition block"
+                >
+                  <img
+                    src={imageSrc}
+                    alt={p.name}
+                    className="w-full h-40 object-cover rounded"
+                  />
+                  <h2 className="mt-4 text-lg font-semibold">{p.name}</h2>
+                  <p className="text-gray-600">
+                    ${Number(p.price ?? 0).toFixed(2)}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {p.stock > 0 ? `Stock: ${p.stock}` : "Agotado"}
+                  </p>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>

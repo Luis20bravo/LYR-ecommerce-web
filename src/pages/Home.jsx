@@ -1,10 +1,22 @@
+// src/pages/Home.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api";
-import Navbar from "../components/Navbar";
 
-// Importamos íconos de react-icons/fa
-import { FaBoxOpen, FaWarehouse, FaShieldAlt, FaTint, FaBroom, FaHardHat } from "react-icons/fa";
+// Navbar global
+import Navbar from "../components/Navbar";
+// Slider de promociones
+import PromoSlider from "../components/PromoSlider";
+
+// Íconos de categorías
+import {
+  FaBoxOpen,
+  FaWarehouse,
+  FaShieldAlt,
+  FaTint,
+  FaBroom,
+  FaHardHat,
+} from "react-icons/fa";
 
 // Diccionario de íconos por categoría
 const icons = {
@@ -26,25 +38,28 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-gradient-to-b from-neutral-50 to-neutral-100 min-h-screen text-gray-800">
+    <div className="bg-gradient-to-b from-cyan-500 to-teal-400 min-h-screen text-gray-800">
       {/* Navbar */}
       <Navbar />
 
-      {/* Hero */}
-      <header className="relative text-center py-20 px-6">
-        <h1 className="text-5xl font-extrabold tracking-tight text-gray-900">
-          Bienvenido a <span className="text-indigo-600">LYRinnovatech</span>
+      {/* Banner publicitario */}
+      <PromoSlider />
+
+      {/* Hero + Info */}
+      <header className="relative text-center py-16 px-6">
+        <h1 className="text-5xl font-extrabold tracking-tight text-white drop-shadow-lg">
+          Bienvenido a <span className="text-orange-500">LYRinnovatech</span>
         </h1>
         {info && (
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-            {info.about}
+          <p className="mt-4 text-lg text-gray-100 max-w-2xl mx-auto">
+            {info.about} — Somos un e-commerce innovador desde Orellana, Ecuador 🇪🇨
           </p>
         )}
       </header>
 
       {/* Categorías */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold mb-10 text-center">
+      <section className="max-w-6xl mx-auto px-6 py-12">
+        <h2 className="text-3xl font-bold mb-10 text-center text-white drop-shadow">
           Explora nuestras categorías
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-8">
@@ -52,10 +67,14 @@ export default function Home() {
             <Link
               key={c.id}
               to={`/categoria/${c.id}`}
-              className="p-6 rounded-xl bg-white shadow hover:shadow-lg transition flex flex-col items-center justify-center cursor-pointer"
+              className="p-6 rounded-xl bg-white shadow hover:shadow-xl transition flex flex-col items-center justify-center cursor-pointer"
             >
-              {icons[c.name] || <FaBoxOpen className="text-gray-400 text-3xl" />}
-              <h3 className="mt-4 text-lg font-semibold">{c.name}</h3>
+              {icons[c.name] || (
+                <FaBoxOpen className="text-gray-400 text-3xl" />
+              )}
+              <h3 className="mt-4 text-lg font-semibold text-gray-800">
+                {c.name}
+              </h3>
               <p className="text-sm text-gray-500 mt-1">
                 {c.active ? "Disponible" : "Próximamente"}
               </p>
@@ -63,6 +82,11 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-white text-gray-600 text-sm text-center py-4 shadow-inner">
+        © {new Date().getFullYear()} LYRinnovatech · Orellana · Ecuador
+      </footer>
     </div>
   );
 }

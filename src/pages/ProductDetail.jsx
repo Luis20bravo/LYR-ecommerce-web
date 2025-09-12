@@ -10,11 +10,13 @@ export default function ProductDetail() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    api.get(`/products/spec/${id}`)
+    api
+      .get(`/products/spec/${id}`)
       .then((r) => setProduct(r.data))
       .catch((e) => console.error("❌ Error cargando producto:", e));
 
-    api.get(`/public/comments?product_id=${id}`)
+    api
+      .get(`/public/comments?product_id=${id}`)
       .then((r) => setComments(r.data))
       .catch((e) => console.error("❌ Error cargando comentarios:", e));
   }, [id]);
@@ -38,6 +40,13 @@ export default function ProductDetail() {
 
   if (!product) return <p className="p-6">Cargando producto...</p>;
 
+  // 👇 lógica de imagen con fallback
+  const imageSrc = product.image_url
+    ? product.image_url.startsWith("http")
+      ? product.image_url
+      : `http://localhost:4000${product.image_url}`
+    : "https://via.placeholder.com/450";
+
   return (
     <div className="bg-white min-h-screen py-12">
       <div className="max-w-6xl mx-auto px-6">
@@ -46,7 +55,7 @@ export default function ProductDetail() {
           {/* Imagen */}
           <div className="rounded-lg overflow-hidden shadow-md">
             <img
-              src={`http://localhost:4000${product.image_url}`}
+              src={imageSrc}
               alt={product.name}
               className="w-full h-[450px] object-cover"
             />

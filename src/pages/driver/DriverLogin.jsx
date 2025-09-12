@@ -99,12 +99,6 @@ export default function DriverLogin() {
               INICIAR SESIÓN
             </button>
           </form>
-
-          <p className="text-xs text-gray-500 text-center mt-4">
-            <a href="#" className="hover:underline">
-              Olvidé mi contraseña
-            </a>
-          </p>
         </div>
       </div>
     </div>

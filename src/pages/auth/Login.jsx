@@ -1,8 +1,10 @@
+// src/pages/auth/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../api"; // tu instancia axios
+import { api } from "../../api";
+import { FaUserShield } from "react-icons/fa"; // 🔹 Ícono admin
 
-export default function Login() {
+export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,8 +18,8 @@ export default function Login() {
       const res = await api.post("/auth/admin/login", { email, password });
 
       if (res.data.token) {
-        localStorage.setItem("token", res.data.token); // guardar token
-        navigate("/admin/dashboard"); // redirigir al dashboard
+        localStorage.setItem("token", res.data.token);
+        navigate("/admin/dashboard");
       } else {
         setError("Credenciales inválidas");
       }
@@ -28,24 +30,34 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-neutral-900">
-      <div className="bg-neutral-800 p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6 text-white">
-          Iniciar Sesión
-        </h1>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        {/* Logo con ícono */}
+        <div className="flex flex-col items-center mb-6">
+          <div className="bg-indigo-100 text-indigo-600 p-4 rounded-full shadow-md mb-3">
+            <FaUserShield size={40} />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Iniciar Sesión Admin
+          </h1>
+          <p className="text-gray-500 text-sm">Accede a tu panel de control</p>
+        </div>
 
         {error && (
-          <div className="bg-red-500 text-white text-sm p-2 rounded mb-4">
+          <div className="bg-red-500 text-white text-sm p-2 rounded mb-4 text-center">
             {error}
           </div>
         )}
 
+        {/* Formulario */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-neutral-300">Correo</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Correo electrónico
+            </label>
             <input
               type="email"
-              className="input w-full mt-1"
+              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -54,10 +66,12 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm text-neutral-300">Contraseña</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Contraseña
+            </label>
             <input
               type="password"
-              className="input w-full mt-1"
+              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -67,7 +81,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white font-semibold"
+            className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition"
           >
             Iniciar Sesión
           </button>
