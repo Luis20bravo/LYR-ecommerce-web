@@ -1,10 +1,11 @@
+// src/pages/Category.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams, useSearchParams, Link } from "react-router-dom";
+import { useParams, useSearchParams, Link, useNavigate } from "react-router-dom";
 import { api } from "../api";
-import Navbar from "../components/Navbar";
 
 export default function Category() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // estado datos
@@ -17,6 +18,8 @@ export default function Category() {
   const [min, setMin] = useState(searchParams.get("minPrice") ?? "");
   const [max, setMax] = useState(searchParams.get("maxPrice") ?? "");
   const [onlyStock, setOnlyStock] = useState(searchParams.get("inStock") === "1");
+
+  const [q, setQ] = useState(""); // para buscador arriba
 
   const abortRef = useRef(null);
 
@@ -54,11 +57,11 @@ export default function Category() {
     fetchProducts(ac.signal, currentParams);
 
     return () => ac.abort();
-  }, [id, searchParams]); // 👈 solo se dispara con cambio de categoría o URL
+  }, [id, searchParams]);
 
   const applyFilters = () => {
     const next = new URLSearchParams(paramsObj);
-    setSearchParams(next); // 👈 solo aquí se actualiza la URL
+    setSearchParams(next);
   };
 
   const resetFilters = () => {
@@ -69,17 +72,48 @@ export default function Category() {
     setSearchParams({});
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (q.trim()) {
+      navigate(`/buscar?search=${encodeURIComponent(q)}`);
+    }
+  };
+
   return (
-    <div className="bg-neutral-50 min-h-screen">
-      <Navbar />
-      <div className="max-w-6xl mx-auto px-6 py-12 space-y-8">
+    <div className="bg-neutral-50 min-h-screen flex flex-col">
+      {/* 🔎 Buscador arriba (navbar simplificado) */}
+      <header className="bg-cyan-500 text-white shadow p-4 flex items-center justify-between">
+        <form
+          onSubmit={handleSearch}
+          className="flex flex-1 max-w-lg bg-white rounded-lg overflow-hidden"
+        >
+          <input
+            type="text"
+            placeholder="Buscar producto..."
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            className="flex-1 px-4 py-2 text-gray-700 outline-none"
+          />
+          <button
+            type="submit"
+            className="px-4 bg-orange-500 hover:bg-orange-600 transition text-white font-semibold"
+          >
+            🔍
+          </button>
+        </form>
+
+        {/* 🔙 Botón regresar */}
+        <Link
+          to="/store"
+          className="ml-4 px-4 py-2 bg-orange-500 hover:bg-orange-600 transition text-white font-semibold rounded-lg"
+        >
+          ← Volver a categorías
+        </Link>
+      </header>
+
+      <div className="max-w-6xl mx-auto px-6 py-12 space-y-8 flex-1">
         <header className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Productos</h1>
-            <Link to="/" className="text-sm text-indigo-600 hover:underline">
-              ← Volver a categorías
-            </Link>
-          </div>
+          <h1 className="text-3xl font-bold">Productos</h1>
           {!!products?.length && !loading && (
             <span className="text-sm text-neutral-400">
               {products.length} ítems

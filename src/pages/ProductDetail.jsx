@@ -1,6 +1,6 @@
 // src/pages/ProductDetail.jsx
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom"; // 👈 agregamos Link
 import { api } from "../api";
 
 export default function ProductDetail() {
@@ -40,7 +40,6 @@ export default function ProductDetail() {
 
   if (!product) return <p className="p-6">Cargando producto...</p>;
 
-  // 👇 lógica de imagen con fallback
   const imageSrc = product.image_url
     ? product.image_url.startsWith("http")
       ? product.image_url
@@ -50,6 +49,16 @@ export default function ProductDetail() {
   return (
     <div className="bg-white min-h-screen py-12">
       <div className="max-w-6xl mx-auto px-6">
+        {/* 🔙 Botón regresar */}
+        <div className="mb-6">
+          <Link
+            to={product.category_id ? `/categoria/${product.category_id}` : "/store"}
+            className="inline-block px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg shadow transition"
+          >
+            ← Volver a la categoría
+          </Link>
+        </div>
+
         {/* Contenedor de producto */}
         <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Imagen */}
@@ -63,9 +72,7 @@ export default function ProductDetail() {
 
           {/* Información */}
           <div className="space-y-5">
-            <h1 className="text-3xl font-bold text-gray-900">
-              {product.name}
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
             <p className="text-gray-700 text-lg leading-relaxed">
               {product.description}
             </p>
@@ -99,9 +106,7 @@ export default function ProductDetail() {
 
         {/* Comentarios */}
         <div className="mt-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Comentarios
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Comentarios</h2>
 
           {comments.length === 0 ? (
             <p className="text-gray-600">

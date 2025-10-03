@@ -11,6 +11,7 @@ import Home from "./pages/Home.jsx";
 import Category from "./pages/Category.jsx";
 import Search from "./pages/Search.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
+import Store from "./pages/Store.jsx"; // ✅ nueva importación
 
 // Auth
 import Login from "./pages/auth/Login.jsx";
@@ -41,6 +42,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/categoria/:id" element={<Category />} />
         <Route path="/buscar" element={<Search />} />
         <Route path="/producto/:id" element={<ProductDetail />} />
+        <Route path="/store" element={<Store />} /> {/* ✅ nueva ruta */}
 
         {/* Autenticación */}
         <Route path="/acceso" element={<Login />} />
@@ -49,7 +51,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/driver/login" element={<DriverLogin />} />
         <Route path="/driver/dashboard" element={<DriverDashboard />} />
         <Route path="/driver/orders" element={<DriverOrders />} />
-        <Route path="/driver/orders/:id" element={<DriverOrderDetail />} /> {/* ✅ nueva ruta */}
+        <Route path="/driver/orders/:id" element={<DriverOrderDetail />} />
 
         {/* Admin protegido */}
         <Route path="/admin" element={<PrivateRoute />}>
